@@ -1,0 +1,229 @@
+<div class="container py-5">
+  <div *ngIf="errMsg" class="alert alert-danger">
+    <h3>{{ errMsg }}</h3>
+  </div>
+
+  <div class="row py-3">
+    <div class="col-sm-3 offset-sm-9">
+      <button
+        class="btn btn-primary float-end"
+        data-bs-toggle="modal"
+        data-bs-target="#addNote"
+      >
+        Add Note
+      </button>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+
+  <div class="row py-5 g-3">
+    <div *ngFor="let note of allUserNotes" class="col-md-3">
+      <div class="note position-relative bg-info p-3">
+        <h3>{{ note.title }}</h3>
+        <p>
+          {{ note.desc }}
+        </p>
+        <div class="position-absolute top-0 end-0 p-3">
+          <div class="dropdown">
+            <i
+              style="cursor: pointer"
+              class="fa-solid fa-ellipsis-vertical"
+              id="dropdownMenuButton1"
+              data-bs-toggle="dropdown"
+            ></i>
+
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+              <li>
+                <a class="dropdown-item" (click)="callEdit(note._id)">Edit</a>
+              </li>
+              <li>
+                <a class="dropdown-item" (click)="callDelete(note._id)"
+                  >Delete</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Button trigger modal -->
+<!-- Modal add new note -->
+<div
+  class="modal fade"
+  id="addNote"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Note</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <form [formGroup]="addNewNoteForm" (ngSubmit)="addNote()">
+        <div class="modal-body">
+          <label for="title">title</label>
+          <input
+            type="text"
+            placeholder="title"
+            id="title"
+            class="form-control"
+            formControlName="title"
+          />
+          <div
+            *ngIf="
+              addNewNoteForm.get('title')?.errors &&
+              addNewNoteForm.get('title')?.touched
+            "
+            class="alert alert-danger"
+          >
+            <p *ngIf="addNewNoteForm.get('title')?.errors?.['required']">
+              title is required
+            </p>
+            <p *ngIf="addNewNoteForm.get('title')?.errors?.['minlength']">
+              title min length is 3
+            </p>
+          </div>
+
+          <label for="desc">description</label>
+          <textarea
+            id="desc"
+            class="form-control"
+            placeholder="desc"
+            formControlName="desc"
+          ></textarea>
+          <div
+            *ngIf="
+              addNewNoteForm.get('desc')?.errors &&
+              addNewNoteForm.get('desc')?.touched
+            "
+            class="alert alert-danger"
+          >
+            <p *ngIf="addNewNoteForm.get('desc')?.errors?.['required']">
+              desc is required
+            </p>
+            <p *ngIf="addNewNoteForm.get('desc')?.errors?.['minlength']">
+              desc min length is 25
+            </p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+          <button
+            type="submit"
+            [disabled]="addNewNoteForm.invalid"
+            class="btn btn-primary"
+          >
+            Add Note
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- modal edit note -->
+<div
+  class="modal fade"
+  id="editNote"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Note</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <form [formGroup]="editNoteForm" (ngSubmit)="editNote()">
+        <div class="modal-body">
+          <label for="title">title</label>
+          <input
+            type="text"
+            placeholder="title"
+            id="editTitle"
+            class="form-control"
+            formControlName="title"
+          />
+          <div
+            *ngIf="
+              editNoteForm.get('title')?.errors &&
+              editNoteForm.get('title')?.touched
+            "
+            class="alert alert-danger"
+          >
+            <p *ngIf="editNoteForm.get('title')?.errors?.['required']">
+              title is required
+            </p>
+            <p *ngIf="editNoteForm.get('title')?.errors?.['minlength']">
+              title min length is 3
+            </p>
+          </div>
+
+          <label for="desc">description</label>
+          <textarea
+            id="editDesc"
+            class="form-control"
+            placeholder="desc"
+            formControlName="desc"
+          ></textarea>
+          <div
+            *ngIf="
+              editNoteForm.get('desc')?.errors &&
+              editNoteForm.get('desc')?.touched
+            "
+            class="alert alert-danger"
+          >
+            <p *ngIf="editNoteForm.get('desc')?.errors?.['required']">
+              desc is required
+            </p>
+            <p *ngIf="editNoteForm.get('desc')?.errors?.['minlength']">
+              desc min length is 25
+            </p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+          <button
+            type="submit"
+            [disabled]="editNoteForm.invalid"
+            class="btn btn-primary"
+          >
+            Update Note
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!--  -->
+<div class="alert text-white alert-success succ position-fixed">
+  <h3>Success</h3>
+</div>

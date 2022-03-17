@@ -1,0 +1,68 @@
+<div class="vh-100" id="particles-js">
+  <div
+    class="position-absolute flex-column text-white d-flex justify-content-center align-items-center w-75 top-50 start-50 translate-middle"
+  >
+    <div *ngIf="errMsg" class="alert alert-danger">
+      <h3>{{ errMsg }}</h3>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="login()" class="w-75">
+      <div>
+        <label for="email">email</label>
+        <input
+          type="email"
+          id="email"
+          placeholder="email"
+          class="form-control"
+          formControlName="email"
+        />
+        <div
+          *ngIf="
+            loginForm.get('email')?.errors && loginForm.get('email')?.touched
+          "
+          class="alert alert-danger"
+        >
+          <p *ngIf="loginForm.get('email')?.errors?.['required']">
+            email is required
+          </p>
+          <p *ngIf="loginForm.get('email')?.errors?.['email']">
+            email is invalid
+          </p>
+        </div>
+      </div>
+
+      <div>
+        <label for="password">password</label>
+        <input
+          type="password"
+          id="password"
+          placeholder="password"
+          class="form-control"
+          formControlName="password"
+        />
+        <div
+          *ngIf="
+            loginForm.get('password')?.errors &&
+            loginForm.get('password')?.touched
+          "
+          class="alert alert-danger"
+        >
+          <p *ngIf="loginForm.get('password')?.errors?.['required']">
+            password is required
+          </p>
+          <p *ngIf="loginForm.get('password')?.errors?.['pattern']">
+            password must be from 3 to 10 characters without spaces
+          </p>
+        </div>
+      </div>
+
+      <button
+        [disabled]="loginForm.invalid"
+        class="btn btn-primary float-end mt-3"
+      >
+        Login
+      </button>
+      <div class="clearfix"></div>
+    </form>
+  </div>
+</div>
